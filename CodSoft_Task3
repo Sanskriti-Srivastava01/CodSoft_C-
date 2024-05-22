@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Student {
+  string name;
+  double grade;
+};
+
+int main() {
+  vector<Student> students;
+  int numStudents;
+
+  cout << "Enter the number of students: ";
+  cin >> numStudents;
+
+  // Input student names and grades
+  for (int i = 0; i < numStudents; ++i) {
+    Student student;
+    cout << "Enter student " << i + 1 << " name: ";
+    cin.ignore(); // Consume newline character from previous input
+    getline(cin, student.name);
+    cout << "Enter student " << i + 1 << " grade (0-100): ";
+    cin >> student.grade;
+    students.push_back(student);
+  }
+
+  // Calculate total grade and number of students
+  double totalGrade = 0;
+  for (const Student& student : students) {
+    totalGrade += student.grade;
+  }
+  double averageGrade = totalGrade / numStudents;
+
+  // Find highest and lowest grades using iterators
+  auto highestGradeIt = max_element(students.begin(), students.end(),
+                                    [](const Student& a, const Student& b) {
+                                      return a.grade < b.grade;
+                                    });
+  auto lowestGradeIt = min_element(students.begin(), students.end(),
+                                   [](const Student& a, const Student& b) {
+                                     return a.grade > b.grade;
+                                   });
+
+  // Display results
+  cout << "\nStudent Grades:" << endl;
+  for (const Student& student : students) {
+    cout << student.name << ": " << student.grade << endl;
+  }
+  cout << "\nAverage Grade: " << averageGrade << endl;
+  cout << "Highest Grade:  " << highestGradeIt->name << " (" << highestGradeIt->grade << ")" << endl;
+  cout << "Lowest Grade:   " << lowestGradeIt->name << " (" << lowestGradeIt->grade << ")" << endl;
+
+  return 0;
+}
